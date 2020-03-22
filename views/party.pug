@@ -1,7 +1,31 @@
 include partials/header.pug
-h1 Qui prend quoi ?
-h2= party.name
+h1.title Qui prend quoi ?
+h2.subtitle= party.name
 h3 Créé par #{party.author}
 
-label(for="url") Partagez l'événement
-input(id="url" value=`${url}`)
+section.section
+    h4.subtitle Elements ajoutés
+    ul
+        each element in party.items
+            li
+                div
+                    p= element.name
+                    p Ajouté par #{element.user}
+                div
+                    a(href=`${url}/items/`+ element._id+'/delete') Supprimer
+
+
+section.section
+    h4.subtitle Ajouter un élément
+    form(method="post" action="/party/"+ party._id +"/items")
+        div
+            label(for="name") Nom de l'élément
+            input(name="name" id="name" required minlength="3" placeholder="Ex: Bière").input
+        div
+            label(for="user") Utilisateur
+            input(name="user" id="user" required placeholder="Ex: Pépito").input
+        button(type="submit" style="margin-top: 10px").button.is-primary Créer
+
+section.section
+    label(for="url") Partagez l'événement
+    input(id="url" value=`${url}` data-clipboard=`${url}` data-share-url=`${url}` data-share-title=`${party.name}` data-share-text=`${party.author} vous invite à rejoindre l'événément ${party.name}`)

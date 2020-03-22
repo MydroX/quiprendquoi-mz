@@ -1,0 +1,9 @@
+@charset "utf-8";
+@import "vendors/reset";
+@import "../node_modules/bulma/bulma.sass";
+@import "config/medias";
+@import "blocs/newParty";
+
+body {
+  padding: 10px;
+}

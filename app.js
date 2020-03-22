@@ -7,6 +7,7 @@ const app = express();
 const port = process.env.PORT;
 
 app.set("view engine", "pug");
+app.use(express.static('build'));
 app.use(bodyParser.urlencoded({extended: true}));
 
 
@@ -26,10 +27,23 @@ app.get('/party/:id', function (req, res) {
             res.render('party', {
                 party: data,
                 title: data.name,
-                url: `${process.env.FRONT_URL}:${process.env.PORT}/party/${data._id}`
+                url: `${process.env.FRONT_URL}:${process.env.PORT}/party/${data._id}`,
+                api: `${process.env.API_URL}`
             }),
         )
         .catch((err) => console.log(err));
+});
+app.post('/party/:id/items', function (req, res) {
+    axios
+        .post(`${process.env.API_URL}/party/${req.params.id}/items`, req.body)
+        .then(({data}) => res.redirect(`/party/${req.params.id}`))
+        .catch((err) => res.send(err));
+});
+app.get('/party/:id/items/:id_item/delete', function (req, res) {
+    axios
+        .delete(`${process.env.API_URL}/party/${req.params.id}/items/${(req.params.id_item)}`)
+        .then(({ data }) => res.redirect(`/party/${req.params.id}`))
+        .catch((err) => res.send(err));
 });
 
 app.listen(port, () => console.log(`Front app listening on port ${port}!`));
